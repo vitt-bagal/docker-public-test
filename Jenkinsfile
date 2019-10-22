@@ -12,7 +12,7 @@ node('docker-jnlp') {
 			echo 'Starting to build docker image'
 			sh 'service docker start'
 			customImage = docker.build("bagalvitthal/ubuntu:${params.Version}","--build-arg Distro=${params.Version} .")
-			customImage.inside { 
+			def customCont = customImage.run { 
 				script {
 					sh '''
 					apt-get update -y
@@ -22,6 +22,7 @@ node('docker-jnlp') {
 					'''
 				}
 			}
+			sh "docker commit customCont bagalvitthal/ubuntu:${params.Version}"
 			sh 'docker images'
 			sh 'docker ps'
 		}
