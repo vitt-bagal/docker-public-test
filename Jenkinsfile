@@ -12,16 +12,7 @@ node('docker-jnlp') {
 			echo 'Starting to build docker image'
 			sh 'service docker start'
 			customImage = docker.build("bagalvitthal/ubuntu:${params.Version}","--build-arg Distro=${params.Version} .")
-			def customCont = customImage.run { 
-				script {
-					sh '''
-					apt-get update -y
-					useradd test -ms /bin/bash
-					echo -e "test\ntest" | passwd test # changing password of test user to test
-					apt-get install -y wget sudo 
-					'''
-				}
-			}
+			sh 'docker run bagalvitthal/ubuntu:${params.Version} /bin/bash -c "apt-get update -y && useradd -m test && apt-get install -y sudo"'
 			sh "docker commit customCont bagalvitthal/ubuntu:${params.Version}"
 			sh 'docker images'
 			sh 'docker ps'
@@ -29,7 +20,6 @@ node('docker-jnlp') {
 		
 		stage('Pull Docker Image & add user it '){
 			echo 'Pushing docker image'	
-			customImage.push()
-
+			sh 'docker push bagalvitthal/ubuntu:${params.Version}'
 		}
 	}
