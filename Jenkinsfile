@@ -14,7 +14,7 @@ node('docker-jnlp') {
 			customImage = docker.build("bagalvitthal/ubuntu:${params.Version}","--build-arg Distro=${params.Version} .")
 			customCont = customImage.run('--name testContainer') 
 			
-			sh 'docker exec -it testContainer /bin/bash -c "bash build.sh"'
+			sh 'docker exec --tty testContainer /bin/bash -c "bash build.sh"'
 			sh "docker commit testContainer bagalvitthal/ubuntu:${params.Version}"
 			sh 'docker images'
 			sh 'docker ps'
