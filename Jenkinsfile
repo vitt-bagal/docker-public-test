@@ -12,8 +12,10 @@ node('docker-jnlp') {
 			echo 'Starting to build docker image'
 			//sh 'service docker start'
 			customImage = docker.build("bagalvitthal/ubuntu:${params.Version}","--build-arg Distro=${params.Version} .")
-			sh 'docker run bagalvitthal/ubuntu:${params.Version} /bin/bash -c "apt-get update -y && useradd -m test && apt-get install -y sudo"'
-			sh "docker commit customCont bagalvitthal/ubuntu:${params.Version}"
+			customCont = customImage.run('--name testContainer') 
+			
+			sh 'docker exec -it testContainer /bin/bash -c "bash build.sh"'
+			sh "docker commit testContainer bagalvitthal/ubuntu:${params.Version}"
 			sh 'docker images'
 			sh 'docker ps'
 		}
