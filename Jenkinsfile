@@ -10,7 +10,7 @@ node('docker-jnlp') {
 		}
 		stage('Pull Docker Image & add user it '){
 			echo 'Starting to build docker image'
-			sh 'service docker start'
+			//sh 'service docker start'
 			customImage = docker.build("bagalvitthal/ubuntu:${params.Version}","--build-arg Distro=${params.Version} .")
 			sh 'docker run bagalvitthal/ubuntu:${params.Version} /bin/bash -c "apt-get update -y && useradd -m test && apt-get install -y sudo"'
 			sh "docker commit customCont bagalvitthal/ubuntu:${params.Version}"
