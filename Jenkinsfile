@@ -7,6 +7,7 @@ node('docker-jnlp') {
 	properties([[$class: 'JiraProjectProperty'], parameters([choice(choices: ['16.04', '18.04'], description: 'These are distro version for ubuntu', name: 'Version')])])
         stage('Checkout'){
 		git url: 'https://github.com/vitt-bagal/docker-public-test'
+		// git branch: 'develop', url: 'https://github.example.com/myorg/myproject.git'
 		}
 		stage('Pull Docker Image & add user it '){
 			echo "Starting to build docker image ubuntu:${params.Version}"
