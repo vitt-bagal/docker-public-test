@@ -24,7 +24,7 @@ node('docker-jnlp') {
 		
 		stage('Verify Image'){
 			echo "Verifying docker image ubuntu:${params.Version}"
-			customImage.inside { 
+			docker.image("bagalvitthal/ubuntu:${params.Version}").inside {
 				script {
 					sh ''' 
  					if getent passwd | cut -d: -f1 | grep test
